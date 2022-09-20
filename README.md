@@ -15,6 +15,8 @@
    - [混合模式](./design-patterns/mixin_pattern.md)
    - [中间件模式](./design-patterns/mediator-middleware_pattern.md)
    - [HOC模式](./design-patterns/HOC_pattern.md)
+   - [Render Props模式](./design-patterns/render_props_pattern.md)
+   - [Hooks](./design-patterns/hooks_pattern.md)
    - [享元模式](./design-patterns/flyweight_pattern.md)
    - [工厂模式](./design-patterns/factory_pattern.md)
    - [复合模式](./design-patterns/compound_pattern.md)
