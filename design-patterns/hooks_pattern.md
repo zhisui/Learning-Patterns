@@ -255,3 +255,19 @@ function useKeyPress(targetKey) {
 ```
 很好，我们可以在Input应用中使用自定义hook,每当用户输入`q`,`l`,`w`时在控制台它们打印出来。
 
+<iframe src="https://codesandbox.io/embed/hooks-5-xplez?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="hooks-5"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+
+使用键输入逻辑并不是只能在`Input`组件中，在多个组件间也可以使用，不需要重复写相同的逻辑。
+Hooks两外一个好处是，在社区中可以构建和共享组件，我们只是自己编写了 useKeyPress 钩子，但实际上根本没有这个必要！如果别人已经写好了这个钩子，我们只需要找到[相应的库](https://github.com/streamich/react-use/blob/master/docs/useKeyPress.md)，安装它就可以使用了。
+这里有一些由社区构建钩子的网站，可以在你的应用程序中使用起来。
+* [React Use](https://github.com/streamich/react-use)
+* [useHook](https://github.com/uidotdev/usehooks)
+* [Collection of React Hooks](https://github.com/nikgraf/react-hooks)
+
+
+
