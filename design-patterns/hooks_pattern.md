@@ -156,3 +156,102 @@ class Input extends React.Component {
   }
 }
 ```
+为了使用`useState`,我们需要引入React提供的`useState`方法，UseState 方法需要提供一个参数: 这是状态的初始值，在本例中是一个空字符串
+
+我们可以从 useState 方法中解构出两个值：
+1.当前转态的值。
+2.更新状态的方法。
+```js
+const [value, setValue] = React.useState(initialValue);
+```
+第一值相当于类组件中的`this.state.[value]`,第二个值相当于类组件中的`this.setState`方法
+
+因为我们处理的是输入的值，所以让我们调用setInput方法来更新当前的状态值。初始值应该是一个空字符串。
+
+```js
+const [input, setInput] = React.useState("");
+```
+现在我们将类组件重构成有状态的函数组件。
+```js
+function Input() {
+  const [input, setInput] = React.useState("");
+
+  return <input onChange={(e) => setInput(e.target.value)} value={input} />;
+}
+```
+输入字段的值等于当前`input`的值，就像在类组件的例子中一样。当用户在输入字段时，使用`setInput`方法更新输入状态的值。
+
+## Effect Hook
+可以看到，我们使用 `useState` 组件来处理函数组件中的状态，但是类组件的另一个好处是可以向组件添加生命周期方法。
+使用`useEffect`我们可以“挂钩”到一个组件生命周期，`useEffect`有效结合了`componentDidMount`、`componentDidUpdate`和`componentWillUnmount`
+生命周期方法。
+
+```js
+componentDidMount() { ... }
+useEffect(() => { ... }, [])
+
+componentWillUnmount() { ... }
+useEffect(() => { return () => { ... } }, [])
+
+componentDidUpdate() { ... }
+useEffect(() => { ... })
+```
+我们来看下在State Hook一节的`Input`例子，每当用户在输入框中输入值时,我们想把输入值打印在控制台，我们需要用`useEeffet`方法监听`Input`的值，我们可以将`input`添加到`useEffect`的依赖数组中,依赖数组是`useEffect`的第二个参数。
+
+```js
+useEffect(() => {
+  console.log(`The user typed ${input}`);
+}, [input]);
+```
+我们看下输出结果
+
+<iframe src="https://codesandbox.io/embed/hooks-4-p237n?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="hooks-4"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+每当用户输入值时，控制台都会打印出来。
+
+## 自定义Hooks
+
+除了React内置的hooks (`useState`, `useEffect`, `useReducer`, `useRef`, `useContext`, `useMemo`, `useImperativeHandle`, `useLayoutEffect`, `useDebugValue`, `useCallback`),们可以很轻松地地创建自定义hook,
+你可能已经注意到，所有的hook都是以`use`开头的，hook使用`use`开头以便React检查是否违反了[hook规则](https://reactjs.org/docs/hooks-rules.html)。
+假设我们希望记录用户在输入时可能按下的某些键。我们的自定义hook应该能够接收一个参数的作为目标键。
+
+```js
+function useKeyPress(targetKey) {}
+```
+我们希望为参数中传递的键值添加一个 `keydown`和 `keyup` 事件。如果用户按下了这个键，这意味着 keydown 事件被触发，那么钩子中的状态应该切换为 true。否则，当用户停止按下该按钮时，将触发 keyup 事件并将状态切换为 false。
+
+```js
+function useKeyPress(targetKey) {
+  const [keyPressed, setKeyPressed] = React.useState(false);
+
+  function handleDown({ key }) {
+    if (key === targetKey) {
+      setKeyPressed(true);
+    }
+  }
+
+  function handleUp({ key }) {
+    if (key === targetKey) {
+      setKeyPressed(false);
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("keydown", handleDown);
+    window.addEventListener("keyup", handleUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleDown);
+      window.removeEventListener("keyup", handleUp);
+    };
+  }, []);
+
+  return keyPressed;
+}
+```
+很好，我们可以在Input应用中使用自定义hook,每当用户输入`q`,`l`,`w`时在控制台它们打印出来。
+
