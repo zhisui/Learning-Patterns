@@ -269,5 +269,134 @@ Hooks两外一个好处是，在社区中可以构建和共享组件，我们只
 * [useHook](https://github.com/uidotdev/usehooks)
 * [Collection of React Hooks](https://github.com/nikgraf/react-hooks)
 
+重写一遍之前章节的计数器例子。我们用React Hook而非类组件来重写它。
+<iframe src="https://codesandbox.io/embed/hooks-6-2w0ll?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="hooks-6"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
+我们将`APP`里面的逻辑分成以下几个部分：
+`useCounter`：返回当前`count`值, `increment`和`decrement`方法的自定义hook。
+`useWindowWidth`:返回当前窗口宽度的自定义hook。
+`App`：返回 `Counter` 和 `Width` 状态函数组件。
 
+通过使用 React Hooks 而不是类组件，我们能够将逻辑分解为更小的、可重用的部分，以分离逻辑。
 
+使用 React Hooks 可以更清楚地将组件的逻辑分成几个较小的部分。更容易逻辑复用，如果我们想要使组件有状态，我们不再需要将函数组件重写为类组件，不再需要对 ES2015类有很好的了解，拥有可重用的状态逻辑可以提高组件的可测试性、灵活性和可读性。
+
+## 其他Hooks指南
+### Adding Hooks
+与其他组件一样，当您希望将 Hook 添加到所编写的代码中时，可以使用一些特殊的函数组件。以下简要概述常见的 Hook 函数:
+
+**1.useState**
+
+`useState` Hook使开发人员无需将其转换为类组件便可更改函数组件内部的状态，这个 Hook 的一个优点是它很简单，不像其他 React Hook 那样复杂。
+
+**2.useEffect**
+
+`useEffect` Hook主要用于函数组件在主要生命周期中执行代码，函数组件的主体不允许变更、订阅、计时器、日志记录和其他副作用。如果这些副作用被执行，可能会导致一些意想不到的bug和和页面卡顿。`useEffect` hook可以防止所有这些“副作用”，提高页面流畅度。它包含了
+`componentDidMount` , `componentDidUpdate` 和 `componentWillUnmount`这几个生命周期。
+
+**3.useContext**
+useContext Hook接收一个 context 对象（React.createContext 的返回值）并返回该 context 的当前值。UseContext Hook 还与 React Context API 一起工作，以便在整个应用程序中共享数据，而无需通过不同层级中传递props。
+
+需要注意的是useContext 的参数必须是 context 对象本身，调用了 useContext 的组件总会在 context 值变化时重新渲染
+
+**useReducer**
+useState的替代方案，在某些场景下，useReducer 会比 useState 更适用，例如 state 逻辑较复杂且包含多个子值，或者下一个 state 依赖于之前的 state 等。
+它接收一个形如 (state, action) => newState 的 reducer和初始值，并返回当前的 state 以及与其配套的 dispatch 方法。使用 useReducer 还能给那些会触发深更新的组件做性能优化
+
+**使用react Hooks的优缺点**
+使用hooks的好处：
+Hooks可根据功能和关注点组织代码，而不是通过生命周期，使得代码更加清晰简洁。下面是使用 React 搜索产品数据表的简单有状态组件与使用 useState 关键字后在 Hooks 中的外观的比较。
+
+**状态组件**
+```js
+class TweetSearchResults extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        filterText: '',
+        inThisLocation: false
+      };
+
+      this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+      this.handleInThisLocationChange = this.handleInThisLocationChange.bind(this);
+    }
+
+    handleFilterTextChange(filterText) {
+      this.setState({
+        filterText: filterText
+      });
+    }
+
+    handleInThisLocationChange(inThisLocation) {
+      this.setState({
+        inThisLocation: inThisLocation
+      })
+    }
+
+    render() {
+      return (
+        <div>
+          <SearchBar
+            filterText={this.state.filterText}
+            inThisLocation={this.state.inThisLocation}
+            onFilterTextChange={this.handleFilterTextChange}
+            onInThisLocationChange={this.handleInThisLocationChange}
+          />
+          <TweetList
+            tweets={this.props.tweets}
+            filterText={this.state.filterText}
+            inThisLocation={this.state.inThisLocation}
+          />
+        </div>
+      );
+    }
+  }
+```
+**相同的组件在Hooks中的体现**
+```js
+const TweetSearchResults = ({tweets}) => {
+  const [filterText, setFilterText] = useState('');
+  const [inThisLocation, setInThisLocation] = useState(false);
+  return (
+    <div>
+      <SearchBar
+        filterText={filterText}
+        inThisLocation={inThisLocation}
+        setFilterText={setFilterText}
+        setInThisLocation={setInThisLocation}
+      />
+      <TweetList
+        tweets={tweets}
+        filterText={filterText}
+        inThisLocation={inThisLocation}
+      />
+    </div>
+  );
+}
+```
+**简化组件呢的复杂性**
+JavaScript 类很难管理，在热重载时很难使用，而且可能不会缩小。React Hooks 解决了这些问题，并确保函数式编程变得简单。有了 Hooks 的实现，我们就不需要类组件了。
+
+在 JavaScript 中重用状态逻辑类可以促进多级继承，从而大大增加整体复杂性和出错的可能性。但是，Hooks 允许您在不编写类的情况下使用 state 和其他 React 特性。使用 React可以复用状态逻辑，而无需一遍又一遍地重写代码。这减少了出错的机会，并允许使用普通函数进行组合。
+
+**共享非可视化逻辑**
+
+在 Hooks 的实现之前，React 没有办法提取和共享非可视化逻辑。这最终导致了更多的复杂性，比如 HOC 模式和render props，只是为了解决一个常见的问题。但是，Hook 的引入解决了这个问题，因为它允许将有状态逻辑提取到一个简单的 JavaScript 函数中。
+
+当然，Hook 也有一些潜在的不利之处，值得我们牢记在心:
+* 必须遵守它的规则，如果没有linter插件，很难知道哪条规则已经被打破
+* 需要相当长的时间练习才能更好地使用（如 useEffect）
+* 避免错误使用（如useCallback, useMemo）
+
+## React Hooks vs Classes
+React引入Hooks时，它产生了一个新问题: 我们如何知道何时将函数组件与 Hooks 和 class 组件一起使用？在 Hook 的帮助下，甚至在函数组件中也可以获得状态和部分生命周期 Hook。Hooks 还允许您在不编写类的情况下使用本地状态和其他 React 特性。
+下面是 Hooks 和 Class 之间的一些区别，可以帮助您做出决定
+
+| React Hooks   | Classes |
+| ----------- | ----------- |
+| 有助于避免多个层次结构并使代码更清晰 | 通常，当您使用 HOC 或 renderProps 时，必须使用多个层次结构重新构建应用程序|
+|提供React组件的一致性   | 由于需要理解绑定和函数调用的上下文，类使人和机器都感到困惑|
