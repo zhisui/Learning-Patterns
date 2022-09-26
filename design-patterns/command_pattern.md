@@ -86,6 +86,51 @@ function TrackOrderCommand(id) {
 }
 ```
 完美! 不需要将方法直接耦合到 OrderManager 实例,它们现在是独立的、解耦的函数，我们可以通过 OrderManager 上可用的 execute 方法来调用它们。
+```js
+class OrderManager {
+  constructor() {
+    this.orders = [];
+  }
+
+  execute(command, ...args) {
+    return command.execute(this.orders, ...args);
+  }
+}
+
+class Command {
+  constructor(execute) {
+    this.execute = execute;
+  }
+}
+
+function PlaceOrderCommand(order, id) {
+  return new Command(orders => {
+    orders.push(id);
+    console.log(`You have successfully ordered ${order} (${id})`);
+  });
+}
+
+function CancelOrderCommand(id) {
+  return new Command(orders => {
+    orders = orders.filter(order => order.id !== id);
+    console.log(`You have canceled your order ${id}`);
+  });
+}
+
+function TrackOrderCommand(id) {
+  return new Command(() =>
+    console.log(`Your order ${id} will arrive in 20 minutes.`)
+  );
+}
+
+const manager = new OrderManager();
+
+manager.execute(new PlaceOrderCommand("Pad Thai", "1234"));
+manager.execute(new TrackOrderCommand("1234"));
+manager.execute(new CancelOrderCommand("1234"));
+
+```
+
 
 ## 优点
 命令模式允许我们将方法与执行操作的对象解耦，如果您正在处理具有一定生命周期的命令，或者应该排队并在特定时间执行的命令，那么它将为您提供更多的控制。
