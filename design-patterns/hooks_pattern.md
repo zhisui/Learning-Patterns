@@ -393,7 +393,7 @@ JavaScript 类很难管理，在热重载时很难使用，而且可能不会缩
 * 避免错误使用（如useCallback, useMemo）
 
 ## React Hooks vs Classes
-React引入Hooks时，它产生了一个新问题: 我们如何知道何时将函数组件与 Hooks 和 class 组件一起使用？在 Hook 的帮助下，甚至在函数组件中也可以获得状态和部分生命周期 Hook。Hooks 还允许您在不编写类的情况下使用本地状态和其他 React 特性。
+React引入Hooks时产生了一个新问题: 我们如何知道何时将函数组件与 Hooks 和 class 组件一起使用？在 Hook 的帮助下，甚至在函数组件中也可以获得状态和部分生命周期 Hook。Hooks 还允许您在不编写类的情况下使用本地状态和其他 React 特性。
 下面是 Hooks 和 Class 之间的一些区别，可以帮助您做出决定
 
 | React Hooks   | Classes |
