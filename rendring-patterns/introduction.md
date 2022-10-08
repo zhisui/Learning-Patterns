@@ -44,3 +44,11 @@ Chrome 团队[鼓励](https://web.dev/rendering-on-the-web/)开发人员考虑�
 ![6](../rendring-patterns/imgs/introduce-6.png)
 
 因此，简单的静态渲染，特别是使用 CDN 进行缓存，有助于实现Core Web Vitals。然而，大多数网站或多或少都会有一些动态内容或用户交互。
+
+## 基于客户端提取的静态渲染
+
+比方说，我们希望增强我们的房地产演示，以显示最新的房地产清单。我们得找个数据提供商才能拿到这些清单。
+![7](../rendring-patterns/imgs/introduce-7.png)
+在这种情况下，我们可以使用基于客户端提取的静态渲染。当您希望每次请求都更新数据时，此模式非常有用.
+![8](../rendring-patterns/imgs/introduce-8.png)
+您仍然可以对网站使用静态呈现，以呈现具有框架组件的 UI，您希望在其中放置动态列表数据。然后，在页面加载之后，我们可以在客户端上获取数据(例如，使用 SWR)。
