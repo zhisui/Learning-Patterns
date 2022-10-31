@@ -91,3 +91,17 @@ ReactDOMServer.renderToString(element)
 此函数返回与 React 元素对应的 HTML 字符串。然后可以将 HTML 呈现给客户端，以便更快地加载页面。
 
 [RenderToString ()](https://reactjs.org/docs/react-dom-server.html#rendertostring)函数可以与 [ReactDOM.hyde ()](https://reactjs.org/docs/react-dom.html#hydrate)一起使用。这将确保呈现的 HTML 在客户端保持原样，并且只在加载后附加事件处理程序。
+为了实现这一点，我们在客户机和服务器上使用与每个页面对应的.js 文件。假设您有一个名为 App 的 React 元素，该元素包含要在通用 App.js 文件中定义的 HTML。服务器端和客户端 React 都可以识别 App 元素。服务器上的 ipage.js 文件可以包含以下代码:
+
+```js
+app.get('/', (req, res) => {
+  const app = ReactDOMServer.renderToString(<App />);
+})
+```
+
+常量 App 现在可以用来生成要呈现的 HTML。客户端的 ipage.js 将具有以下功能，以确保合成元素 App。
+```js
+ReactDOM.hydrate(<App />, document.getElementById('root'));
+```
+
+在[这里](https://www.digitalocean.com/community/tutorials/react-server-side-rendering)可以找到 SSR 与 React 的完整例子。
