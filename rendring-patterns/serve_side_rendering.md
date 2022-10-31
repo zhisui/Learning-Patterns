@@ -90,4 +90,4 @@ ReactDOMServer.renderToString(element)
 
 此函数返回与 React 元素对应的 HTML 字符串。然后可以将 HTML 呈现给客户端，以便更快地加载页面。
 
-RenderToString ()函数可以与 ReactDOM.hyde ()一起使用。这将确保呈现的 HTML 在客户端保持原样，并且只在加载后附加事件处理程序。
+[RenderToString ()](https://reactjs.org/docs/react-dom-server.html#rendertostring)函数可以与 [ReactDOM.hyde ()](https://reactjs.org/docs/react-dom.html#hydrate)一起使用。这将确保呈现的 HTML 在客户端保持原样，并且只在加载后附加事件处理程序。
